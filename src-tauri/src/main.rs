@@ -97,7 +97,7 @@ fn main() {
           let last_state = last_state.clone();
           let last_ = last_state.take();
           let client = client.clone();
-          match MediaManager::get_media_properties_async().await {
+          match MediaManager::get_media_properties() {
             Ok(state) => {
               if last_ != state {
                 debugprint(format!("Updated properties {:?}", state));
