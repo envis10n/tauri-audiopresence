@@ -16,10 +16,13 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
+      "category": "Utility",
       "copyright": "",
       "deb": {
-        "depends": []
+        "depends": [
+          "libdbus-1-dev",
+          "pkg-config"
+        ]
       },
       "externalBin": [],
       "icon": [
