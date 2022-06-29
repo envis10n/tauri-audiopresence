@@ -1,11 +1,11 @@
 [package]
-name = "app"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+name = "tauri-audiopresence"
+version = "0.1.3"
+description = "A Tauri app for updating Discord Rich Presence with currently playing media metadata."
+authors = ["envis10n"]
 license = ""
 repository = ""
-default-run = "app"
+default-run = "tauri-audiopresence"
 edition = "2021"
 rust-version = "1.57"
 
