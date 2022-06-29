@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "tauri-audiopresence",
-    "version": "0.1.7"
+    "version": "0.1.8"
   },
   "tauri": {
     "allowlist": {
@@ -54,12 +54,7 @@
       "csp": null
     },
     "updater": {
-      "active": true,
-      "endpoints": [
-        "https://tauri-audiopresence.envis10n.dev/{{target}}/{{current_version}}"
-      ],
-      "dialog": true,
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQ1Qjg4OTVFRjk0NjYxQzkKUldUSllVYjVYb200MVo0WU1DS01kc2lYcTVJTGduM3M5NGZVTW1GbWowVzE0QTU2UDJxdml4b0gK"
+      "active": false
     },
     "windows": [],
     "systemTray": {

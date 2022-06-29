@@ -3156,7 +3156,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-audiopresence"
-version = "0.1.7"
+version = "0.1.8"
 dependencies = [
  "audiopresence",
  "crossbeam",
