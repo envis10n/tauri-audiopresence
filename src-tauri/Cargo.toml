@@ -1,6 +1,6 @@
 [package]
 name = "tauri-audiopresence"
-version = "0.1.3"
+version = "0.1.5"
 description = "A Tauri app for updating Discord Rich Presence with currently playing media metadata."
 authors = ["envis10n"]
 license = ""
