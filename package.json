@@ -1,7 +1,8 @@
 {
   "name": "tauri-audiopresence",
   "scripts": {
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "demo": "node -r dotenv/config && echo $TAURI_PRIVATE_KEY"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.0.1"
