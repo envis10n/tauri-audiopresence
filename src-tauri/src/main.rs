@@ -4,7 +4,7 @@
 )]
 
 use tauri::{SystemTray, CustomMenuItem, SystemTrayMenu, SystemTrayEvent};
-use audiopresence::{MediaManager, MediaProps, OsMediaProps};
+use audiopresence::{MediaManager, MediaProps, OsMediaProps, PlayerStatus};
 use std::{sync::{Arc, Mutex}, fmt::Display};
 use crossbeam::atomic::AtomicCell;
 use discord_rich_presence::{ DiscordIpc, DiscordIpcClient, activity };
@@ -91,21 +91,60 @@ fn main() {
 
       let last_state = Arc::new(AtomicCell::new(start_props));
 
+      let player_status = Arc::new(AtomicCell::new(PlayerStatus::None));
+
       tauri::async_runtime::spawn(async move {
         loop {
           time::sleep(time::Duration::from_millis(2000)).await;
           let last_state = last_state.clone();
-          let last_ = last_state.take();
+          let player_status = player_status.clone();
+          let status_ = player_status.take();
           let client = client.clone();
-          match MediaManager::get_media_properties() {
-            Ok(state) => {
-              if last_ != state {
-                debugprint(format!("Updated properties {:?}", state));
-                last_state.store(state.clone());
-                set_discord_presence(client, state).unwrap();
-              } else {
-                last_state.store(last_);
+          match MediaManager::player_status() {
+            Ok(pstatus) => {
+              match pstatus {
+                PlayerStatus::None => {
+                  if status_ != PlayerStatus::None {
+                    debugprint("Player stopped.");
+                    clear_discord_presence(client.clone()).unwrap();
+                    last_state.take();
+                  }
+                },
+                PlayerStatus::Paused(_) => {
+                  if status_ != pstatus {
+                    debugprint("Player paused.");
+                    clear_discord_presence(client).unwrap();
+                    last_state.take();
+                  }
+                }
+                PlayerStatus::Playing(_) => {
+                  if status_ != pstatus {
+                    debugprint("Player unpaused.");
+                  }
+                  match MediaManager::currently_playing() {
+                    Ok(state) => {
+                      let last_ = last_state.take();
+                      if last_ != state {
+                        debugprint(format!("Updated properties {:?}", state));
+                        last_state.store(state.clone());
+                        set_discord_presence(client, state).unwrap();
+                      } else {
+                        last_state.store(last_);
+                      }
+                    }
+                    Err(e) => {
+                      if e.to_string().as_str() != "ERROR: The operation completed successfully." { // temp to not panic when we just can't get a session.
+                        println!("ERROR: {}", e);
+                        break;
+                      } else {
+                        clear_discord_presence(client).unwrap();
+                        last_state.take();
+                      }
+                    }
+                  }
+                }
               }
+              player_status.store(pstatus);
             }
             Err(e) => {
               if e.to_string().as_str() != "ERROR: The operation completed successfully." { // temp to not panic when we just can't get a session.
